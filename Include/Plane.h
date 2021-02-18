@@ -7,11 +7,14 @@
 
 namespace photon {
 
-    struct Sphere : public Geometry {
+    struct Plane : Geometry {
 
-        float radius;
+        Vec3f normal;
 
-        Sphere(const Vec3f& position, float radius, const Material& material);
+        Plane(
+            const Vec3f& position,
+            const Vec3f& normal,
+            const Material& material);
 
         std::optional<float> intersect(const Ray& ray) const override;
         Vec3f get_normal_at_point(const Vec3f& point) const override;

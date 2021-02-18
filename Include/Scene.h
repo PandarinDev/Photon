@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Sphere.h"
+#include "Geometry.h"
 #include "Light.h"
 #include "MathUtils.h"
 
@@ -11,11 +11,13 @@ namespace photon {
 
     struct Scene {
 
-        std::vector<Sphere> spheres;
+        std::vector<std::unique_ptr<Geometry>> geometry;
         std::vector<std::unique_ptr<Light>> lights;
 
-        Scene(const std::vector<Sphere>& spheres, std::vector<std::unique_ptr<Light>>&& lights)
-            : spheres(spheres), lights(std::move(lights)) {}
+        Scene(
+            std::vector<std::unique_ptr<Geometry>>&& geometry,
+            std::vector<std::unique_ptr<Light>>&& lights)
+            : geometry(std::move(geometry)), lights(std::move(lights)) {}
 
     };
 

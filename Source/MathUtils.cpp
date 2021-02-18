@@ -16,6 +16,10 @@ namespace photon {
         return Vec3f(x + other.x, y + other.y, z + other.z);
     }
 
+    Vec3f Vec3f::operator-() const {
+        return Vec3f(-x, -y, -z);
+    }
+
     Vec3f Vec3f::operator-(const Vec3f& other) const {
         return Vec3f(x - other.x, y - other.y, z - other.z);
     }

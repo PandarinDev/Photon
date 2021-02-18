@@ -22,6 +22,7 @@ namespace photon {
         Vec3f(float x, float y, float z);
 
         Vec3f operator+(const Vec3f& other) const;
+        Vec3f operator-() const;
         Vec3f operator-(const Vec3f& other) const;
         Vec3f operator*(float s) const;
         Vec3f operator*(const Vec3f& other) const;

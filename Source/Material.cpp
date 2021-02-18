@@ -2,7 +2,7 @@
 
 namespace photon {
 
-    Material::Material(const Color& diffuse_color)
-        : diffuse_color(diffuse_color) {}
+    Material::Material(const Color& color, float shininess)
+        : color(color), shininess(shininess) {}
 
 }

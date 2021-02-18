@@ -7,9 +7,10 @@ namespace photon {
 
     struct Material {
 
-        Color diffuse_color;
+        Color color;
+        float shininess;
 
-        Material(const Color& diffuse_color);
+        Material(const Color& color, float shininess);
 
     };
 
