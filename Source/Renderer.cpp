@@ -92,7 +92,7 @@ namespace photon {
                         const auto shininess = geometry->material.shininess;
                         const auto reflection = normal * 2.0f * nl_dot_product - point_to_light;
                         const auto rv_dot_product = std::max(reflection.dot(-intersection_point), 0.0f);
-                        const auto specular_intensity = std::powf(rv_dot_product / (reflection.length() * intersection_point.length()), shininess);
+                        const auto specular_intensity = std::pow(rv_dot_product / (reflection.length() * intersection_point.length()), shininess);
 
                         const auto total_intensity = diffuse_intensity + specular_intensity;
                         intensities.x += light->intensity.x * total_intensity; 

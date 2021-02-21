@@ -21,7 +21,7 @@ namespace photon {
             return std::nullopt;
         }
 
-        const auto sqrt_d = std::sqrtf(discriminant);
+        const auto sqrt_d = std::sqrt(discriminant);
         const auto two_a = 2.0f * a;
         const auto t1 = (-b + sqrt_d) / two_a;
         const auto t2 = (-b - sqrt_d) / two_a;
