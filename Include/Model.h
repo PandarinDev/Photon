@@ -1,20 +1,20 @@
 #pragma once
 
-#include "MathUtils.h"
 #include "Geometry.h"
+#include "Triangle.h"
 
-#include <optional>
+#include <vector>
 
 namespace photon {
 
-    struct Plane : Geometry {
+    struct Model : Geometry {
 
         Vec3f position;
-        Vec3f normal;
+        std::vector<Triangle> triangles;
 
-        Plane(
+        Model(
             const Vec3f& position,
-            const Vec3f& normal,
+            const std::vector<Triangle>& triangles,
             const Material& material);
 
         std::optional<Intersection> intersect(const Ray& ray) const override;

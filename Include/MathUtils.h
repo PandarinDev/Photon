@@ -33,6 +33,7 @@ namespace photon {
         Vec3f normalize() const;
         float distance(const Vec3f& other) const;
         float dot(const Vec3f& other) const;
+        Vec3f cross(const Vec3f& other) const;
 
     };
 

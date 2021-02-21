@@ -56,6 +56,14 @@ namespace photon {
         return x * other.x + y * other.y + z * other.z;
     }
 
+    Vec3f Vec3f::cross(const Vec3f& other) const {
+        return Vec3f(
+            y * other.z - z * other.y,
+            z * other.x - x * other.z,
+            x * other.y - y * other.x
+        );
+    }
+
     Ray::Ray(const Vec3f& origin, const Vec3f& direction)
         : origin(origin), direction(direction.normalize()) {}
 

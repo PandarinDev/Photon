@@ -24,14 +24,14 @@ namespace photon {
             for (std::int32_t x = x_range.first; x <= x_range.second; ++x) {
                 auto canvas_point = to_canvas_point(x, y);
                 const auto ray = Ray(camera.position, canvas_point);
-                std::optional<Pair<float, Geometry*>> closest_intersection;
+                std::optional<Pair<Intersection, Geometry*>> closest_intersection;
                 // Try to intersect the ray with every geometry in the scene
                 for (const auto& geometry : scene.geometry) {
                     const auto intersection = geometry->intersect(ray);
                     if (!intersection) {
                         continue;
                     }
-                    if (!closest_intersection || *intersection < closest_intersection->first) {
+                    if (!closest_intersection || intersection->t < closest_intersection->first.t) {
                         closest_intersection = Pair(*intersection, geometry.get());
                     }
                 }
@@ -43,8 +43,8 @@ namespace photon {
                 }
 
                 const auto geometry = closest_intersection->second;
-                const auto intersection_point = ray.point_at(closest_intersection->first);
-                const auto normal = geometry->get_normal_at_point(intersection_point).normalize();
+                const auto intersection_point = ray.point_at(closest_intersection->first.t);
+                const auto normal = closest_intersection->first.normal;
                 // Compute the color at the intersection
                 Vec3f intensities;
                 for (const auto& light : scene.lights) {
@@ -70,7 +70,7 @@ namespace photon {
                         for (const auto& other_geometry : scene.geometry) {
                             if (other_geometry.get() == geometry) continue;
                             const auto shadow_intersection = other_geometry->intersect(light_ray);
-                            if (shadow_intersection && *shadow_intersection <= point_to_light.length()) {
+                            if (shadow_intersection && shadow_intersection->t <= point_to_light.length()) {
                                 is_shadowed = true;
                                 break;
                             }
