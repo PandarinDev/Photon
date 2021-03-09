@@ -24,8 +24,13 @@ namespace photon {
         // Split work among threads
         std::vector<std::future<std::vector<ImagePixel>>> workers;
         for (std::size_t i = 0; i < num_threads; ++i) {
-            workers.emplace_back(std::async(std::launch::async, [this, &scene, i, pixel_per_thread] {
-                return render_part(scene, i * pixel_per_thread, i * pixel_per_thread + pixel_per_thread);
+            workers.emplace_back(std::async(std::launch::async, [this, &scene, &pixels, i, pixel_per_thread, num_threads] {
+                // For the last workers the end pixel needs to be pixels.size() - 1, otherwise
+                // if we use i * pixel_per_thread + pixel_per_thread - 1 we are subject to rounding errors.
+                const auto end_pixel = i != num_threads - 1
+                    ? i * pixel_per_thread + pixel_per_thread - 1
+                    : pixels.size() - 1;
+                return render_part(scene, i * pixel_per_thread, end_pixel);
             }));
         }
         // Join and merge results
