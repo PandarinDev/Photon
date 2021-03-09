@@ -8,9 +8,9 @@ namespace photon {
     struct Material {
 
         Color color;
-        float shininess;
+        double shininess;
 
-        Material(const Color& color, float shininess);
+        Material(const Color& color, double shininess);
 
     };
 

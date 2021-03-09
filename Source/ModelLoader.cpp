@@ -2,6 +2,7 @@
 #include "StringUtils.h"
 
 #include <tuple>
+#include <string>
 #include <fstream>
 #include <charconv>
 #include <stdexcept>
@@ -24,18 +25,18 @@ namespace photon {
             // Handle vertex lines
             if (parts[0] == "v") {
                 vertices.emplace_back(
-                    string_utils.str_to<float>(parts[1]),
-                    string_utils.str_to<float>(parts[2]),
-                    string_utils.str_to<float>(parts[3])
+                    string_utils.to_float(parts[1]),
+                    string_utils.to_float(parts[2]),
+                    string_utils.to_float(parts[3])
                 );
             }
             // Handle face lines
             else if (parts[0] == "f") {
                 // Note: The -1 is because indexing in OBJ starts from 1.
                 faces.emplace_back(
-                    string_utils.str_to<std::size_t>(parts[1]) - 1,
-                    string_utils.str_to<std::size_t>(parts[2]) - 1,
-                    string_utils.str_to<std::size_t>(parts[3]) - 1
+                    string_utils.to_size(parts[1]) - 1,
+                    string_utils.to_size(parts[2]) - 1,
+                    string_utils.to_size(parts[3]) - 1
                 );
             }
         }

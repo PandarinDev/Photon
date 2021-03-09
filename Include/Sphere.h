@@ -10,9 +10,9 @@ namespace photon {
     struct Sphere : public Geometry {
 
         Vec3f position;
-        float radius;
+        double radius;
 
-        Sphere(const Vec3f& position, float radius, const Material& material);
+        Sphere(const Vec3f& position, double radius, const Material& material);
 
         std::optional<Intersection> intersect(const Ray& ray) const override;
 

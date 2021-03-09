@@ -1,8 +1,10 @@
 #include "StringUtils.h"
 
+#include <cstdlib>
+
 namespace photon {
 
-    std::vector<std::string_view> StringUtils::split(std::string_view input, std::string_view delimiter) {
+    std::vector<std::string_view> StringUtils::split(std::string_view input, std::string_view delimiter) const {
         std::vector<std::string_view> result;
         std::size_t position = 0;
         while (position < input.size()) {
@@ -18,6 +20,16 @@ namespace photon {
             position = match_position + 1;
         }
         return result;
+    }
+
+    double StringUtils::to_float(std::string_view str) const {
+        char* end_ptr = const_cast<char*>(str.data() + str.size());
+        return std::strtod(str.data(), &end_ptr);
+    }
+
+    size_t StringUtils::to_size(std::string_view str) const {
+        char* end_ptr = const_cast<char*>(str.data() + str.size());
+        return std::strtoull(str.data(), &end_ptr, 10);
     }
 
 }

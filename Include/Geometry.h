@@ -20,7 +20,7 @@ namespace photon {
 
     protected:
 
-        bool is_valid_intersection(float t) const;
+        bool is_valid_intersection(double t) const;
 
     };
 

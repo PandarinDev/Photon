@@ -4,7 +4,7 @@
 
 namespace photon {
 
-    Sphere::Sphere(const Vec3f& position, float radius, const Material& material)
+    Sphere::Sphere(const Vec3f& position, double radius, const Material& material)
         : Geometry(material), position(position), radius(radius) {}
 
     std::optional<Intersection> Sphere::intersect(const Ray& ray) const {
@@ -27,7 +27,7 @@ namespace photon {
         const auto t2 = (-b - sqrt_d) / two_a;
         const auto t1_valid = is_valid_intersection(t1);
         const auto t2_valid = is_valid_intersection(t2);
-        std::optional<float> intersection_t;
+        std::optional<double> intersection_t;
         if (t1_valid && t2_valid) intersection_t = t1 < t2 ? t1 : t2;
         if (t1_valid) intersection_t = t1;
         if (t2_valid) intersection_t = t2;

@@ -29,9 +29,9 @@ namespace photon {
         const auto c1 = p - v1;
         const auto c2 = p - v2;
         const auto hit =
-            normal.dot(edge0.cross(c0)) > 0 &&
-            normal.dot(edge1.cross(c1)) > 0 &&
-            normal.dot(edge2.cross(c2)) > 0;
+            normal.dot(edge0.cross(c0)) > 0.0 &&
+            normal.dot(edge1.cross(c1)) > 0.0 &&
+            normal.dot(edge2.cross(c2)) > 0.0;
 
         return hit ? std::make_optional<Intersection>(t, normal) : std::nullopt;
     }

@@ -20,7 +20,12 @@ namespace photon {
 
     private:
 
-        Vec3f to_canvas_point(float x, float y) const;
+        Vec3f to_canvas_point(double x, double y) const;
+
+        std::vector<ImagePixel> render_part(
+            const Scene& scene,
+            std::size_t start_pixel,
+            std::size_t end_pixel) const;
 
     };
 
