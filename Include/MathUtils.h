@@ -1,5 +1,7 @@
 #pragma once
 
+#include <ostream>
+
 namespace photon {
 
     struct Vec2f {
@@ -28,6 +30,8 @@ namespace photon {
         Vec3f operator*(const Vec3f& other) const;
         
         Vec3f& operator+=(const Vec3f& other);
+
+        friend std::ostream& operator<<(std::ostream& os, const Vec3f& vec);
 
         double length() const;
         Vec3f normalize() const;

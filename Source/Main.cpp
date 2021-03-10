@@ -5,6 +5,9 @@
 #include "Triangle.h"
 #include "ModelLoader.h"
 
+#include <chrono>
+#include <iostream>
+
 int main(int argc, char** argv) {
     using namespace photon;
     Canvas canvas(1024, 1024, 1.0f);
@@ -14,12 +17,8 @@ int main(int argc, char** argv) {
     Color background_color(25, 128, 240);
     // Geometry
     std::vector<std::unique_ptr<Geometry>> geometry;
-    // geometry.emplace_back(std::make_unique<Sphere>(Vec3f(0.0f, 0.0f, 3.0f), 1.4f, Material(Color(255, 0, 0), 15.0f)));
-    // geometry.emplace_back(std::make_unique<Sphere>(Vec3f(0.0f, 0.0f, 0.15f), 0.05f, Material(Color(0, 0, 255), 3.0f)));
-    // geometry.emplace_back(std::make_unique<Plane>(Vec3f(0.0f, 0.01f, 0.0f), Vec3f(0.0f, -1.0f, 0.0f), Material(Color(0, 255, 0), 20.0f)));
-    // geometry.emplace_back(std::make_unique<Triangle>(Vec3f(-0.3f, 0.0f, 3.0f), Vec3f(0.3f, 0.0f, 3.0f), Vec3f(0.0f, -0.6f, 3.0f), Material(Color(255, 0, 0), 3.0f)));
     ModelLoader model_loader;
-    auto suzanne = model_loader.load_model("Assets/Suzanne.obj", Material(Color(255, 0, 0), 15.0f));
+    auto suzanne = model_loader.load_model("Assets/Suzanne.obj", Material(Color(255, 0, 0), 25.0f));
     geometry.emplace_back(std::move(suzanne));
 
     // Lights
@@ -32,7 +31,10 @@ int main(int argc, char** argv) {
     Renderer renderer(canvas, camera, background_color);
 
     // Render scene into an image
+    const auto render_start = std::chrono::high_resolution_clock::now();
     const auto image = renderer.render(scene);
+    std::chrono::duration<double> render_elapsed = std::chrono::high_resolution_clock::now() - render_start;
+    std::cout << "Rendering took " << render_elapsed.count() << "s" << std::endl;
     ImageWriter image_writer;
     image_writer.write_image_to_file(image, "foobar.ppm");
     return 0;

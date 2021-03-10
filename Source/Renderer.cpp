@@ -99,7 +99,7 @@ namespace photon {
                     Ray light_ray(intersection_point, point_to_light);
                     for (const auto& other_geometry : scene.geometry) {
                         const auto shadow_intersection = other_geometry->intersect(light_ray);
-                        if (!shadow_intersection || std::abs(shadow_intersection->t) < 1e-4f) {
+                        if (!shadow_intersection || shadow_intersection->t < 1e-6f) {
                             continue;
                         }
                         if (shadow_intersection->t <= point_to_light.length()) {

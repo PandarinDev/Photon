@@ -39,6 +39,11 @@ namespace photon {
         return *this;
     }
 
+    std::ostream& operator<<(std::ostream& os, const Vec3f& vec) {
+        os << "[" << vec.x << ", " << vec.y << ", " << vec.z << "]";
+        return os;
+    }
+
     double Vec3f::length() const {
         return sqrt(x * x + y * y + z * z);
     }

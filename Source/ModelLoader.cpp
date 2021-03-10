@@ -1,4 +1,5 @@
 #include "ModelLoader.h"
+#include "ModelFace.h"
 #include "StringUtils.h"
 
 #include <tuple>
@@ -19,7 +20,8 @@ namespace photon {
         // Read file and parse vertex and face data
         std::string line;
         std::vector<Vec3f> vertices;
-        std::vector<std::tuple<std::size_t, std::size_t, std::size_t>> faces;
+        std::vector<Vec3f> normals;
+        std::vector<ModelFace> faces;
         while (std::getline(file_handle, line)) {
             const auto parts = string_utils.split(line);
             // Handle vertex lines
@@ -30,14 +32,31 @@ namespace photon {
                     string_utils.to_float(parts[3])
                 );
             }
+            // Handle normal lines
+            else if (parts[0] == "vn") {
+                normals.emplace_back(
+                    string_utils.to_float(parts[1]),
+                    string_utils.to_float(parts[2]),
+                    string_utils.to_float(parts[3])
+                );
+            }
             // Handle face lines
             else if (parts[0] == "f") {
                 // Note: The -1 is because indexing in OBJ starts from 1.
-                faces.emplace_back(
-                    string_utils.to_size(parts[1]) - 1,
-                    string_utils.to_size(parts[2]) - 1,
-                    string_utils.to_size(parts[3]) - 1
-                );
+                std::vector<std::vector<std::string_view>> parts_split;
+                for (std::size_t i = 1; i <= 3; ++i) {
+                    parts_split.emplace_back(string_utils.split(parts[i], "/"));
+                }
+
+                std::array<ModelVertex, 3> model_vertices;
+                for (std::size_t i = 0; i < model_vertices.size(); ++i) {
+                    const auto& part = parts_split[i];
+                    model_vertices[i] = ModelVertex(
+                        string_utils.to_size(part[0]) - 1,
+                        string_utils.to_size(part[1]) - 1
+                    );
+                }
+                faces.emplace_back(model_vertices);
             }
         }
 
@@ -45,10 +64,19 @@ namespace photon {
         std::vector<Triangle> triangles;
         triangles.reserve(faces.size());
         for (const auto& face : faces) {
+            std::array<Vec3f, 3> triangle_vertices = {
+                vertices[face.vertices[0].vertex],
+                vertices[face.vertices[1].vertex],
+                vertices[face.vertices[2].vertex]
+            };
+            std::array<Vec3f, 3> triangle_normals = {
+                normals[face.vertices[0].normal],
+                normals[face.vertices[1].normal],
+                normals[face.vertices[2].normal]
+            };
             triangles.emplace_back(
-                vertices.at(std::get<0>(face)),
-                vertices.at(std::get<1>(face)),
-                vertices.at(std::get<2>(face)),
+                triangle_vertices,
+                triangle_normals,
                 material
             );
         }
