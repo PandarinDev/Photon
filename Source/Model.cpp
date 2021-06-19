@@ -4,9 +4,11 @@ namespace photon {
 
     Model::Model(
         const Vec3f& position,
+        const Sphere& bounding_box,
         const std::vector<Triangle>& triangles,
         const Material& material)
-        : Geometry(material), position(position), triangles(triangles) {}
+        : Geometry(material), position(position),
+          bounding_box(bounding_box), triangles(triangles) {}
 
     std::optional<Intersection> Model::intersect(const Ray& ray) const {
         std::optional<Intersection> closest_intersection;
@@ -20,6 +22,10 @@ namespace photon {
             }
         }
         return closest_intersection;
+    }
+
+    std::optional<Sphere> Model::get_bounding_box() const {
+        return bounding_box;
     }
 
 }

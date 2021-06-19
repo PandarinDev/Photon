@@ -22,15 +22,21 @@ namespace photon {
         std::vector<Vec3f> vertices;
         std::vector<Vec3f> normals;
         std::vector<ModelFace> faces;
+        std::optional<std::pair<double, Vec3f>> furthest_vertex;
         while (std::getline(file_handle, line)) {
             const auto parts = string_utils.split(line);
             // Handle vertex lines
             if (parts[0] == "v") {
-                vertices.emplace_back(
+                Vec3f vertex(
                     string_utils.to_float(parts[1]),
                     string_utils.to_float(parts[2]),
-                    string_utils.to_float(parts[3])
-                );
+                    string_utils.to_float(parts[3]));
+                // Store the furthest vertex for bounding box building
+                const auto vertex_distance = vertex.length();
+                if (!furthest_vertex || furthest_vertex->first < vertex_distance) {
+                    furthest_vertex = std::make_pair(vertex_distance, vertex);
+                }
+                vertices.emplace_back(vertex);
             }
             // Handle normal lines
             else if (parts[0] == "vn") {
@@ -81,7 +87,7 @@ namespace photon {
             );
         }
 
-        return std::make_unique<Model>(Vec3f(), triangles, material);
+        return std::make_unique<Model>(Vec3f(), Sphere(Vec3f(), furthest_vertex->first, material), triangles, material);
     }
 
 }

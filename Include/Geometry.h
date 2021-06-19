@@ -9,6 +9,8 @@
 
 namespace photon {
 
+    struct Sphere;
+
     struct Geometry {
 
         Material material;
@@ -17,6 +19,7 @@ namespace photon {
         virtual ~Geometry() = default;
 
         virtual std::optional<Intersection> intersect(const Ray& ray) const = 0;
+        virtual std::optional<Sphere> get_bounding_box() const;
 
     protected:
 

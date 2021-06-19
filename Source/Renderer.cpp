@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include "Image.h"
+#include "Sphere.h"
 
 #include <optional>
 #include <vector>
@@ -57,6 +58,11 @@ namespace photon {
             std::optional<Pair<Intersection, Geometry*>> closest_intersection;
             // Try to intersect the ray with every geometry in the scene
             for (const auto& geometry : scene.geometry) {
+                // Try to intersect with the bounding box first
+                const auto bounding_box = geometry->get_bounding_box();
+                if (bounding_box && !bounding_box->intersect(ray)) {
+                    continue;
+                }
                 const auto intersection = geometry->intersect(ray);
                 if (!intersection) {
                     continue;
@@ -127,8 +133,8 @@ namespace photon {
                     const auto specular_intensity = std::pow(rv_dot_product / (reflection.length() * intersection_point.length()), shininess);
 
                     const auto total_intensity = diffuse_intensity + specular_intensity;
-                    intensities.x += light->intensity.x * total_intensity; 
-                    intensities.y += light->intensity.y * total_intensity; 
+                    intensities.x += light->intensity.x * total_intensity;
+                    intensities.y += light->intensity.y * total_intensity;
                     intensities.z += light->intensity.z * total_intensity;
                 }
             }
